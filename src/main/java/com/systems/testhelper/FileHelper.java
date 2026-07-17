@@ -3,7 +3,6 @@ package com.systems.testhelper;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,7 +24,13 @@ public final class FileHelper {
 
     /** Resolve a relative path against the project root (user.dir). */
     public static Path projectPath(String first, String... more) {
-        return Paths.get(System.getProperty("user.dir"), first, more);
+        Path result = Path.of(System.getProperty("user.dir"), first);
+        for (String segment : more) {
+            if (!segment.isEmpty()) {
+                result = result.resolve(segment);
+            }
+        }
+        return result;
     }
 
     /** Check if a file exists at the given relative path. */
